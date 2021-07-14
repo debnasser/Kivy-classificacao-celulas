@@ -1,16 +1,16 @@
-<TelaManager>:
-    Screen1:
-        name: 'screen1'
-        id: screen1
-    Screen2:
-        name: 'screen2'
-        id: screen2
+<AppManager>:
+    HomeScreen:
+        name: 'home_screen'
+        id: home_screen
+    ViewScreen:
+        name: 'view_screen'
+        id: view_screen
         
-<Screen1>:
+<HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
         Label:
-            id: lb_titulo
+            id: title_label
             canvas.before:
                 Color:
                     rgba: 0.8, 1, 0.5, 1
@@ -29,7 +29,7 @@
             color: 0, 0, 0, 1
         
         Label:
-            id: lb_descrição
+            id: desc_label
             canvas.before:
                 Color:
                     rgba: 1, 1, 1, 1
@@ -47,10 +47,6 @@
             valign: 'center'
             color: 0, 0, 0, 1
 
-        #FileChooserIconView:
-        #    id: filechooser
-        #    on_selection: root.selected(filechooser.selection)
-       
         FileChoose:
             size_hint_y: 0.1
             on_release: root.choose()
@@ -60,25 +56,17 @@
             id: image
             source: ''
             
-        #Button:
-            #text: 'Digite aqui'
-            #on_release: root.manager.current = 'screen2'
-        #TextInput:
-        #    id: txt
         Button:
             text: 'Enviar imagem para classificação'
-            #on_release: root.load_txt() 
-            on_release: root.classificar_img() 
-            #pos_hint: {'x': 0.5, 'y': 0} 
+            on_release: root.submit_img()
             size_hint_y: 0.3
         
         Button:
             text: 'Fechar'
             on_release: root.close_application() 
-            #pos_hint: {'x': 0.5, 'y': 0.5} 
-            size_hint_y: 0.1    
+            size_hint_y: 0.1
         
-<Screen2>:
+<ViewScreen>:
     BoxLayout:
         orientation: 'vertical'
         Label:
@@ -89,9 +77,7 @@
                 Rectangle: 
                     size: self.size
                     pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
-            #text: 'oi'
-            
-            #comandos para fazer com que o tamanho do label acompanhe a altura do texto
+
             size_hint_y: None
             size: self.texture_size
             text_size: self.width, None
@@ -100,41 +86,13 @@
             font_size: '30sp'
             halign: 'center'
             valign: 'center'
-            #padding_x: '30dp'
-            #padding_y: '30dp'
             color: 0, 0, 0, 1
 		Image:
             id: image2
             source: ''
         Button:
             text: 'Enviar nova imagem para classificação'
-            on_release: root.voltar_tela()
+            on_release: root.change_screen()
 			size_hint_y: 0.1
-
-            
-            
-
-<FirstLayout>:
-    canvas:
-        Color:
-            rgba: 0.45, 1, 0.56, 1
-        Rectangle:
-            size: self.size
-	orientation: 'vertical'
-	padding: '40dp'
-	MyBytton:
-		text: 'firstbutton'
-		#on_release = root.load_text()
-		#size_hint_y:                     #mudar tamanho do botao
-		#pos_hint: {'x': 0.5, 'y': 0}     #mudar tamanho do botao
-	#MyBytton: 
-		#text: 'secondbutton'
-		#on_release = root.clear()
-
-		
-<MyBytton@Button>:
-    background_color: 0.988, 0.063, 0.263, 1
-    background_down: ''
-
 
 # usar dp para medida de padding e sp para medida de fonte
