@@ -10,6 +10,7 @@ from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.properties import ListProperty
 from plyer import filechooser
+import shutil
 
 class TelaManager(ScreenManager):
     pass
@@ -22,8 +23,9 @@ class Screen1(Screen):
 
     def classificar_img(self):
         print("cliquei")
-        os.system('python "C:/Users/xr4good/Desktop/Kivy/yolov5/detect.py" --weights "C:/Users/xr4good/Desktop/Kivy/yolov5/weights/best.pt" --img-size 1376 --source "'+self.ids.image.source+'" --augment --save-txt')
+        os.system('python "C:/Users/xr4good/Desktop/Kivy-classificacao-celulas/yolov5/detect.py" --weights "C:/Users/xr4good/Desktop/Kivy-classificacao-celulas/yolov5/weights/best.pt" --name "C:/Users/xr4good/Desktop/Kivy-classificacao-celulas/yolov5/runs/detect/exp/" --img-size 1376 --source "'+self.ids.image.source+'" --augment --agnostic-nms --save-txt')
         self.manager.current = 'screen2'
+        self.manager.ids.screen2.ids.image2.source = "C:\\Users\\xr4good\\Desktop\\Kivy-classificacao-celulas\\yolov5\\runs\\detect\\exp\\"+self.ids.image.source.split("\\")[len(self.ids.image.source.split("\\"))-1:][0]
         
     def selected(self, file):
         try:
@@ -60,11 +62,15 @@ class Screen1(Screen):
     def close_application(self):
         # closing application
         App.get_running_app().stop()
+        #os.remove('C:\\Users\\xr4good\\Desktop\\Kivy-classificacao-celulas\\yolov5\\runs\\detect\\exp\\')
         # removing window
         Window.close()
 
 class Screen2(Screen):
-    pass
+    def voltar_tela(self):
+        self.manager.current = 'screen1'
+        shutil.rmtree('C:\\Users\\xr4good\\Desktop\\Kivy-classificacao-celulas\\yolov5\\runs\\detect\\exp\\')
+        
 
 class FileChoose(Button):
     '''
@@ -84,8 +90,12 @@ class FileChoose(Button):
 #        self.remove_widget()
 	
 class Test(App):
-    def build(self):
+    def build(self):          
         return TelaManager()
         #return FirstLayout()
-		
+
+try:
+    shutil.rmtree('C:\\Users\\xr4good\\Desktop\\Kivy-classificacao-celulas\\yolov5\\runs\\detect\\exp\\')
+except:
+    pass
 Test().run()

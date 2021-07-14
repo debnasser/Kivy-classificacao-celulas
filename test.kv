@@ -104,11 +104,12 @@
             #padding_y: '30dp'
             color: 0, 0, 0, 1
 		Image:
-            id: image
+            id: image2
             source: ''
         Button:
-            text: 'Me aperta de novo'
-            on_release: root.manager.current = 'screen1'
+            text: 'Enviar nova imagem para classificação'
+            on_release: root.voltar_tela()
+			size_hint_y: 0.1
 
             
             
