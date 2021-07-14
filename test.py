@@ -22,7 +22,7 @@ class Screen1(Screen):
 
     def classificar_img(self):
         print("cliquei")
-        os.system('python run_classification.py')
+        os.system('python "C:/Users/xr4good/Desktop/Kivy/yolov5/detect.py" --weights "C:/Users/xr4good/Desktop/Kivy/yolov5/weights/best.pt" --img-size 1376 --source "'+self.ids.image.source+'" --augment --save-txt')
         self.manager.current = 'screen2'
         
     def selected(self, file):
