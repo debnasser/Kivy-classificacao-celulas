@@ -1,18 +1,21 @@
-import os
 import shutil
 
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
+from kivy.uix.dropdown import DropDown
 from kivy.uix.screenmanager import Screen, ScreenManager
 from plyer import filechooser
 
-BASE_PATH = 'D:/Projects/Kivy-classificacao-celulas/yolov5/'
+from DetectThread import DetectThread
+from Utils import BASE_PATH, BASE_ANALYSIS_PATH, NEGATIVE_ANALYSIS_PATH, LESIONED_ANALYSIS_PATH
 
 
 def _clean_environment():
-    shutil.rmtree(BASE_PATH + 'runs/detect/exp/')
+    shutil.rmtree(BASE_PATH + BASE_ANALYSIS_PATH)
+    shutil.rmtree(BASE_PATH + NEGATIVE_ANALYSIS_PATH)
+    shutil.rmtree(BASE_PATH + LESIONED_ANALYSIS_PATH)
 
 
 class AppManager(ScreenManager):
@@ -27,14 +30,17 @@ class HomeScreen(Screen):
         self.manager.current = 'view_screen'
         self.ids.txt.text = ''  # para limpar o input quando voltar pra essa tela
 
-    def submit_img(self):
-        os.system('python "' + BASE_PATH + 'detect.py" --weights "' + BASE_PATH + 'weights/best.pt" --name "' +
-                  BASE_PATH + '/runs/detect/exp/" --img-size 1376 --source "' + self.ids.image.source +
-                  '" --augment --agnostic-nms --save-txt')
-        self.manager.current = 'view_screen'
+    def _set_image(self):
         splits = self.ids.image.source.split("\\")
         img_name = splits[len(splits) - 1]
-        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "runs/detect/exp/" + img_name
+        print(BASE_PATH + BASE_ANALYSIS_PATH + img_name)
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + BASE_ANALYSIS_PATH + img_name
+
+    def submit_img(self):
+        detect_thread = DetectThread(self.ids.image.source, self._set_image)
+        detect_thread.daemon = True
+        detect_thread.start()
+        self.manager.current = 'view_screen'
 
     def selected(self, file):
         try:
@@ -63,6 +69,10 @@ class ViewScreen(Screen):
 
 
 class FileChoose(Button):
+    pass
+
+
+class LabelDropDown(DropDown):
     pass
 
 

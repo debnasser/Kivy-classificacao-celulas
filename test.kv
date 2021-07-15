@@ -87,12 +87,28 @@
             halign: 'center'
             valign: 'center'
             color: 0, 0, 0, 1
-		Image:
+		AsyncImage:
             id: image2
             source: ''
+            pos: self.pos
         Button:
             text: 'Enviar nova imagem para classificação'
             on_release: root.change_screen()
 			size_hint_y: 0.1
+
+<LabelDropDown>:
+    Button:
+        text: 'Todas'
+        size_hint_y: None
+        height: 44
+        #on_release: root.select('item1')
+    Button:
+        text: 'Lesioned'
+        size_hint_y: None
+        height: 44
+    Button:
+        text: 'Negative'
+        size_hint_y: None
+        height: 44
 
 # usar dp para medida de padding e sp para medida de fonte
