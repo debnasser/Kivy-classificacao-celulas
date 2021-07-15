@@ -50,7 +50,6 @@ class HomeScreen(Screen):
         self.popup = WaitingPopUp()
         self.popup.open()
         detect_thread = DetectThread(self.ids.image.source, self._set_image)
-        detect_thread.daemon = True
         detect_thread.start()
 
     def selected(self, file):
@@ -78,6 +77,8 @@ class ViewScreen(Screen):
     def change_screen(self):
         self.manager.current = 'home_screen'
         _clean_environment()
+        self.manager.ids.view_screen.ids.image2.source = ''
+        self.manager.ids.view_screen.ids.img_result_text.text = ''
 
     def change_original(self):
         self.manager.ids.view_screen.ids.image2.source = self.manager.ids.home_screen.ids.image.source
