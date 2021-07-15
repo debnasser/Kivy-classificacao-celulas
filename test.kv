@@ -9,43 +9,6 @@
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
-        Label:
-            id: title_label
-            canvas.before:
-                Color:
-                    rgba: 0.8, 1, 0.5, 1
-                Rectangle: 
-                    size: self.size
-                    pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
-            text: 'Ferramenta XX'
-            #comandos para fazer com que o tamanho do label acompanhe a altura do texto
-            size_hint_y: None
-            size: self.texture_size
-            text_size: self.width, None
-            
-            font_size: '20sp'
-            halign: 'center'
-            valign: 'center'
-            color: 0, 0, 0, 1
-        
-        Label:
-            id: desc_label
-            canvas.before:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle: 
-                    size: self.size
-                    pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
-            text: 'Para iniciar, selecione uma imagem'
-            #comandos para fazer com que o tamanho do label acompanhe a altura do texto
-            size_hint_y: None
-            size: self.texture_size
-            text_size: self.width, None
-            
-            font_size: '20sp'
-            halign: 'center'
-            valign: 'center'
-            color: 0, 0, 0, 1
 
         FileChoose:
             size_hint_y: 0.1
@@ -57,9 +20,11 @@
             source: ''
             
         Button:
+            id: submit_button
+            disabled: True
             text: 'Enviar imagem para classificação'
             on_release: root.submit_img()
-            size_hint_y: 0.3
+            size_hint_y: 0.2
         
         Button:
             text: 'Fechar'
@@ -69,28 +34,43 @@
 <ViewScreen>:
     BoxLayout:
         orientation: 'vertical'
-        Label:
-            id: lb
-            canvas.before:
-                Color:
-                    rgba: 0.8, 1, 0.5, 1
-                Rectangle: 
-                    size: self.size
-                    pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
 
-            size_hint_y: None
-            size: self.texture_size
-            text_size: self.width, None
-            
-            #text_size: self.size    # se o texto for maior que o tamanho da tela precisa desse comando para quebrar o texto
-            font_size: '30sp'
-            halign: 'center'
-            valign: 'center'
-            color: 0, 0, 0, 1
+        BoxLayout:
+            orientation:'horizontal'
+            size_hint_y: 0.1
+
+            Button:
+                text: "Sem Marcações"
+                on_release: root.change_original()
+
+            Button:
+                text:'Todas'
+                on_release: root.change_geral()
+
+            Button:
+                text:'Lesioned'
+                on_release: root.change_lesioned()
+
+            Button:
+                text:'Negative'
+                on_release: root.change_negative()
+
 		AsyncImage:
             id: image2
             source: ''
-            pos: self.pos
+
+        Label:
+            id: img_result_text
+            size_hint_y: 0.05
+            orientation: 'center'
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
+            color: 0, 0, 0, 1
+
         Button:
             text: 'Enviar nova imagem para classificação'
             on_release: root.change_screen()
@@ -99,16 +79,26 @@
 <LabelDropDown>:
     Button:
         text: 'Todas'
-        size_hint_y: None
-        height: 44
-        #on_release: root.select('item1')
+        size_hint_y: 0.2
+
     Button:
         text: 'Lesioned'
-        size_hint_y: None
-        height: 44
+        size_hint_y: 0.2
+
     Button:
         text: 'Negative'
-        size_hint_y: None
-        height: 44
+        size_hint_y: 0.2
+
+<WaitingPopUp>:
+    title: 'Aviso'
+    size_hint_x: 0.6
+    size_hint_y: 0.2
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text:'Aguarde enquanto processamos sua imagem, este popup \nfechará automaticamente ao finalizar o processamento'
+
 
 # usar dp para medida de padding e sp para medida de fonte
