@@ -1,7 +1,7 @@
 import os
 from threading import Thread
 
-from Utils import BASE_PATH, BASE_ANALYSIS_PATH, LESIONED_ANALYSIS_PATH, NEGATIVE_ANALYSIS_PATH
+from Utils import BASE_PATH_YOLO, BASE_ANALYSIS_PATH
 
 
 class DetectThread(Thread):
@@ -11,13 +11,7 @@ class DetectThread(Thread):
         self.callback = callback
 
     def run(self):
-        os.system('python "' + BASE_PATH + 'detect.py" --weights "' + BASE_PATH + 'weights/best.pt" --name "' +
-                  BASE_PATH + BASE_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
-                  '" --augment --agnostic-nms --save-txt')
-        os.system('python "' + BASE_PATH + 'detect.py" --weights "' + BASE_PATH + 'weights/best.pt" --name "' +
-                  BASE_PATH + LESIONED_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
-                  '" --augment --agnostic-nms --save-txt --classes 0')
-        os.system('python "' + BASE_PATH + 'detect.py" --weights "' + BASE_PATH + 'weights/best.pt" --name "' +
-                  BASE_PATH + NEGATIVE_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
-                  '" --augment --agnostic-nms --save-txt --classes 1')
+        os.system('python "' + BASE_PATH_YOLO + 'detect.py" --weights "' + BASE_PATH_YOLO + 'weights/best.pt" --name "' +
+                  BASE_PATH_YOLO + BASE_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
+                  '" --agnostic-nms --save-txt')
         self.callback()
