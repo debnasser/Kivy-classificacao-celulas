@@ -22,14 +22,9 @@
         Button:
             id: submit_button
             disabled: True
-            text: 'Enviar imagem para classificação'
+            text: 'Submeter imagem'
             on_release: root.submit_img()
-            size_hint_y: 0.2
-        
-        Button:
-            text: 'Fechar'
-            on_release: root.close_application() 
-            size_hint_y: 0.1
+            size_hint_y: 0.15
         
 <ViewScreen>:
     BoxLayout:
@@ -48,11 +43,11 @@
                 on_release: root.change_geral()
 
             Button:
-                text:'Lesioned'
+                text:'Lesionadas'
                 on_release: root.change_lesioned()
 
             Button:
-                text:'Negative'
+                text:'Negativo'
                 on_release: root.change_negative()
 
 		AsyncImage:
@@ -72,7 +67,7 @@
             color: 0, 0, 0, 1
 
         Button:
-            text: 'Enviar nova imagem para classificação'
+            text: 'Submeter nova imagem'
             on_release: root.change_screen()
 			size_hint_y: 0.1
 

@@ -113,7 +113,7 @@ class WaitingPopUp(Popup):
 
 class Test(App):
     def build(self):
-        self.title = "Ferramenta XX"
+        self.title = "Citopathologist Eye Assistant"
         return AppManager()
 
 
