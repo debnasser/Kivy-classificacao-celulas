@@ -7,7 +7,6 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.uix.button import Button
-from kivy.uix.dropdown import DropDown
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from matplotlib import pyplot as plt, patches
@@ -40,7 +39,7 @@ def _get_result(img_name, source):
     shapes_all = []
     shapes_lesion = []
     shapes_negative = []
-    colors = [(1, 0, 0), (0 / 255, 76 / 255, 1)]
+    colors = [(1, 0, 0), (0, 76 / 255, 1)]
     for index, l in df.iterrows():
         color = colors[0] if l["lesion"] == 0 else colors[1]
         w = l["width"] * img_width
@@ -72,7 +71,7 @@ def _get_result(img_name, source):
 
         plt.gca().set_axis_off()
         plt.margins(0, 0)
-        plt.savefig("D:/Projects/Kivy-classificacao-celulas/images/" + names[i], bbox_inches='tight', pad_inches=0)
+        plt.savefig(BASE_PATH + "images/" + names[i], bbox_inches='tight', pad_inches=0)
         plt.close()
 
     if df.iloc[0]["lesion"] == 0:
@@ -88,7 +87,7 @@ class HomeScreen(Screen):
         splits = self.ids.image.source.split("\\")
         img_name = splits[len(splits) - 1]
         self.manager.ids.view_screen.ids.img_result_text.text = _get_result(img_name, self.ids.image.source)
-        self.manager.ids.view_screen.ids.image2.source = "D:/Projects/Kivy-classificacao-celulas/images/all.png"
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/all.png"
         self.popup.dismiss()
 
     def submit_img(self):
@@ -122,28 +121,24 @@ class HomeScreen(Screen):
 class ViewScreen(Screen):
     def change_screen(self):
         self.manager.current = 'home_screen'
-        _clean_environment()
         self.manager.ids.view_screen.ids.image2.source = ''
         self.manager.ids.view_screen.ids.img_result_text.text = ''
+        _clean_environment()
 
     def change_original(self):
-        self.manager.ids.view_screen.ids.image2.source = "D:/Projects/Kivy-classificacao-celulas/images/original.png"
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/original.png"
 
-    def change_geral(self):
-        self.manager.ids.view_screen.ids.image2.source = "D:/Projects/Kivy-classificacao-celulas/images/all.png"
+    def change_all(self):
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/all.png"
 
     def change_lesioned(self):
-        self.manager.ids.view_screen.ids.image2.source = "D:/Projects/Kivy-classificacao-celulas/images/lesioned.png"
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/lesioned.png"
 
     def change_negative(self):
-        self.manager.ids.view_screen.ids.image2.source = "D:/Projects/Kivy-classificacao-celulas/images/negative.png"
+        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/negative.png"
 
 
 class FileChoose(Button):
-    pass
-
-
-class LabelDropDown(DropDown):
     pass
 
 

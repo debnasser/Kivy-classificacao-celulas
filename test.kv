@@ -24,7 +24,7 @@
             disabled: True
             text: 'Submeter imagem'
             on_release: root.submit_img()
-            size_hint_y: 0.15
+            size_hint_y: 0.1
         
 <ViewScreen>:
     BoxLayout:
@@ -40,7 +40,7 @@
 
             Button:
                 text:'Todas'
-                on_release: root.change_geral()
+                on_release: root.change_all()
 
             Button:
                 text:'Lesionadas'
@@ -67,24 +67,12 @@
 		AsyncImage:
             id: image2
             source: ''
+            nocache: True
 
         Button:
             text: 'Submeter nova imagem'
             on_release: root.change_screen()
 			size_hint_y: 0.1
-
-<LabelDropDown>:
-    Button:
-        text: 'Todas'
-        size_hint_y: 0.2
-
-    Button:
-        text: 'Lesioned'
-        size_hint_y: 0.2
-
-    Button:
-        text: 'Negative'
-        size_hint_y: 0.2
 
 <WaitingPopUp>:
     title: 'Aviso'
@@ -95,7 +83,7 @@
         orientation: 'vertical'
 
         Label:
-            text:'Aguarde enquanto processamos sua imagem, este popup \nfechará automaticamente ao finalizar o processamento'
+            text:'Aguarde enquanto processamos sua imagem. Este popup \nfechará automaticamente ao finalizar o processamento'
 
 
 # usar dp para medida de padding e sp para medida de fonte
