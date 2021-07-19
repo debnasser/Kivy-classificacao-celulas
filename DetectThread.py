@@ -11,7 +11,7 @@ class DetectThread(Thread):
         self.callback = callback
 
     def run(self):
-        os.system('python "' + BASE_PATH_YOLO + 'detect.py" --weights "' + BASE_PATH_YOLO + 'weights/best.pt" --name "' +
-                  BASE_PATH_YOLO + BASE_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
+        os.system('python "' + BASE_PATH_YOLO + 'detect.py" --weights "' + BASE_PATH_YOLO + 'weights/best.pt" --name "'
+                  + BASE_PATH_YOLO + BASE_ANALYSIS_PATH + '" --img-size 1376 --source "' + self.img_source +
                   '" --agnostic-nms --save-txt')
         self.callback()

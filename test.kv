@@ -1,37 +1,38 @@
 <AppManager>:
     HomeScreen:
-        name: 'home_screen'
+        name: "home_screen"
         id: home_screen
     ViewScreen:
-        name: 'view_screen'
+        name: "view_screen"
         id: view_screen
         
 <HomeScreen>:
     BoxLayout:
-        orientation: 'vertical'
+        orientation: "vertical"
 
-        FileChoose:
+        Button:
+            id: file_choose
             size_hint_y: 0.1
             on_release: root.choose()
-            text: 'Carregue uma imagem'
+            text: "Carregar uma imagem"
             
         Image:
             id: image
-            source: 'images/fundo.png'
+            source: "images/fundo.png"
             
         Button:
             id: submit_button
             disabled: True
-            text: 'Submeter imagem'
+            text: "Processar sua imagem"
             on_release: root.submit_img()
             size_hint_y: 0.1
         
 <ViewScreen>:
     BoxLayout:
-        orientation: 'vertical'
+        orientation: "vertical"
 
         BoxLayout:
-            orientation:'horizontal'
+            orientation: "horizontal"
             size_hint_y: 0.1
 
             Button:
@@ -39,22 +40,24 @@
                 on_release: root.change_original()
 
             Button:
-                text:'Todas'
+                text: "Todas"
                 on_release: root.change_all()
 
             Button:
-                text:'Lesionadas'
+                text: "Lesionadas"
+                background_color: [1, 0, 0]
                 on_release: root.change_lesioned()
 
             Button:
-                text:'Negativas'
+                text: "Negativas"
+                background_color: [0, 0.298, 1]
                 on_release: root.change_negative()
 
         Label:
             id: img_result_text
             size_hint_y: 0.1
             font_size: 20
-            orientation: 'center'
+            orientation: "center"
             canvas.before:
                 Color:
                     rgba: 1, 1, 1, 1
@@ -70,20 +73,21 @@
             nocache: True
 
         Button:
-            text: 'Submeter nova imagem'
+            text: "Processar nova imagem"
             on_release: root.change_screen()
 			size_hint_y: 0.1
 
 <WaitingPopUp>:
-    title: 'Aviso'
+    title: "Aviso"
     size_hint_x: 0.6
     size_hint_y: 0.2
 
     BoxLayout:
-        orientation: 'vertical'
+        orientation: "vertical"
 
         Label:
-            text:'Aguarde enquanto processamos sua imagem. Este popup \nfechará automaticamente ao finalizar o processamento'
+            text: "Aguarde enquanto processamos sua imagem. \nEste popup fechará automaticamente ao finalizar o processamento."
+            halign: "center"
 
 
 # usar dp para medida de padding e sp para medida de fonte

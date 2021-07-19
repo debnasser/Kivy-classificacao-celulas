@@ -6,7 +6,6 @@ from PIL import Image
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ListProperty
-from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from matplotlib import pyplot as plt, patches
@@ -15,6 +14,9 @@ from plyer import filechooser
 from DetectThread import DetectThread
 from Utils import BASE_PATH_YOLO, BASE_ANALYSIS_PATH, BASE_PATH
 
+# Para gerar as imagens fora da thread principal
+plt.switch_backend('agg')
+
 
 def _clean_environment():
     shutil.rmtree(BASE_PATH_YOLO + BASE_ANALYSIS_PATH)
@@ -22,10 +24,6 @@ def _clean_environment():
     os.remove(BASE_PATH + "images/lesioned.png")
     os.remove(BASE_PATH + "images/negative.png")
     os.remove(BASE_PATH + "images/original.png")
-
-
-class AppManager(ScreenManager):
-    pass
 
 
 def _get_result(img_name, source):
@@ -39,7 +37,7 @@ def _get_result(img_name, source):
     shapes_all = []
     shapes_lesion = []
     shapes_negative = []
-    colors = [(1, 0, 0), (0, 76 / 255, 1)]
+    colors = [(1, 0, 0), (0, 0.298, 1)]
     for index, l in df.iterrows():
         color = colors[0] if l["lesion"] == 0 else colors[1]
         w = l["width"] * img_width
@@ -80,6 +78,10 @@ def _get_result(img_name, source):
         return "Essa imagem foi classificada como: NEGATIVA"
 
 
+class AppManager(ScreenManager):
+    pass
+
+
 class HomeScreen(Screen):
     selection = ListProperty([])
 
@@ -97,21 +99,18 @@ class HomeScreen(Screen):
         detect_thread = DetectThread(self.ids.image.source, self._set_image)
         detect_thread.start()
 
-    def selected(self, file):
-        try:
-            self.ids.image.source = file[0]
-        except:
-            pass
-
     def choose(self):
         filechooser.open_file(on_selection=self.handle_selection)
 
     def handle_selection(self, selection):
         self.selection = selection
+        # Para permitir selecionar a mesma imagem após retornar da view_screen
+        self.on_selection()
 
     def on_selection(self, *a, **k):
         self.ids.image.source = self.selection[0]
         self.ids.submit_button.disabled = False
+        self.ids.file_choose.text = "Carregar outra imagem"
 
     def close_application(self):
         App.get_running_app().stop()
@@ -120,26 +119,25 @@ class HomeScreen(Screen):
 
 class ViewScreen(Screen):
     def change_screen(self):
-        self.manager.current = 'home_screen'
-        self.manager.ids.view_screen.ids.image2.source = ''
-        self.manager.ids.view_screen.ids.img_result_text.text = ''
+        self.manager.current = "home_screen"
+        self.ids.image2.source = ""
+        self.ids.img_result_text.text = ""
         _clean_environment()
+        self.manager.ids.home_screen.ids.image.source = "images/fundo.png"
+        self.manager.ids.home_screen.ids.file_choose.text = "Carregar uma imagem"
+        self.manager.ids.home_screen.ids.submit_button.disabled = True
 
     def change_original(self):
-        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/original.png"
+        self.ids.image2.source = BASE_PATH + "images/original.png"
 
     def change_all(self):
-        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/all.png"
+        self.ids.image2.source = BASE_PATH + "images/all.png"
 
     def change_lesioned(self):
-        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/lesioned.png"
+        self.ids.image2.source = BASE_PATH + "images/lesioned.png"
 
     def change_negative(self):
-        self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/negative.png"
-
-
-class FileChoose(Button):
-    pass
+        self.ids.image2.source = BASE_PATH + "images/negative.png"
 
 
 class WaitingPopUp(Popup):
