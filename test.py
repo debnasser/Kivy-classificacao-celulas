@@ -1,5 +1,6 @@
 import os
 import shutil
+from tkinter import *
 
 import pandas as pd
 from PIL import Image
@@ -12,6 +13,8 @@ from matplotlib import pyplot as plt, patches
 from plyer import filechooser
 
 from DetectThread import DetectThread
+# noinspection PyUnresolvedReferences
+from TooltipButton import TooltipButton
 from Utils import BASE_PATH_YOLO, BASE_ANALYSIS_PATH, BASE_PATH
 
 # Para gerar as imagens fora da thread principal
@@ -73,9 +76,9 @@ def _get_result(img_name, source):
         plt.close()
 
     if df.iloc[0]["lesion"] == 0:
-        return "Essa imagem foi classificada como: LESIONADA"
+        return "Essa imagem foi classificada como: [color=ff0000]LESIONADA[/color]"
     else:
-        return "Essa imagem foi classificada como: NEGATIVA"
+        return "Essa imagem foi classificada como: [color=004cff]NEGATIVA[/color]"
 
 
 class AppManager(ScreenManager):
@@ -84,6 +87,7 @@ class AppManager(ScreenManager):
 
 class HomeScreen(Screen):
     selection = ListProperty([])
+    control = [False, False]
 
     def _set_image(self):
         splits = self.ids.image.source.split("\\")
@@ -103,14 +107,28 @@ class HomeScreen(Screen):
         filechooser.open_file(on_selection=self.handle_selection)
 
     def handle_selection(self, selection):
-        self.selection = selection
-        # Para permitir selecionar a mesma imagem após retornar da view_screen
-        self.on_selection()
+        if self.selection == selection:
+            self.on_selection()
+        else:
+            self.selection = selection
 
     def on_selection(self, *a, **k):
-        self.ids.image.source = self.selection[0]
-        self.ids.submit_button.disabled = False
-        self.ids.file_choose.text = "Carregar outra imagem"
+        try:
+            self.ids.image.source = self.selection[0]
+            self.ids.submit_button.disabled = False
+            self.ids.file_choose.text = "Carregar outra imagem"
+        except:
+            pass
+
+    def change_btn_status(self, pos, status):
+        self.control[pos] = status
+        result = False
+        for c in self.control:
+            result = result or c
+        if result:
+            Window.set_system_cursor("hand")
+        else:
+            Window.set_system_cursor("arrow")
 
     def close_application(self):
         App.get_running_app().stop()
@@ -118,6 +136,8 @@ class HomeScreen(Screen):
 
 
 class ViewScreen(Screen):
+    control = [False, False, False, False, False]
+
     def change_screen(self):
         self.manager.current = "home_screen"
         self.ids.image2.source = ""
@@ -139,6 +159,16 @@ class ViewScreen(Screen):
     def change_negative(self):
         self.ids.image2.source = BASE_PATH + "images/negative.png"
 
+    def change_btn_status(self, pos, status):
+        self.control[pos] = status
+        result = False
+        for c in self.control:
+            result = result or c
+        if result:
+            Window.set_system_cursor("hand")
+        else:
+            Window.set_system_cursor("arrow")
+
 
 class WaitingPopUp(Popup):
     pass
@@ -147,7 +177,8 @@ class WaitingPopUp(Popup):
 class Test(App):
     def build(self):
         self.title = "Citopathologist Eye Assistant"
-        return AppManager()
+        manager = AppManager()
+        return manager
 
 
 if __name__ == '__main__':

@@ -10,22 +10,28 @@
     BoxLayout:
         orientation: "vertical"
 
-        Button:
+        TooltipButton:
             id: file_choose
             size_hint_y: 0.1
             on_release: root.choose()
             text: "Carregar uma imagem"
+            order: 0
+            callback: root.change_btn_status
+            tooltip_text: "Clique aqui para carregar sua imagem"
             
         Image:
             id: image
             source: "images/fundo.png"
             
-        Button:
+        TooltipButton:
             id: submit_button
-            disabled: True
             text: "Processar sua imagem"
-            on_release: root.submit_img()
             size_hint_y: 0.1
+            on_release: root.submit_img()
+            disabled: True
+            order: 1
+            callback: root.change_btn_status
+            tooltip_text: "Clique aqui para processar sua imagem"
         
 <ViewScreen>:
     BoxLayout:
@@ -35,23 +41,35 @@
             orientation: "horizontal"
             size_hint_y: 0.1
 
-            Button:
+            TooltipButton:
                 text: "Sem Marcações"
                 on_release: root.change_original()
+                order: 0
+                callback: root.change_btn_status
+                tooltip_text: "Remover marcações"
 
-            Button:
+            TooltipButton:
                 text: "Todas"
                 on_release: root.change_all()
+                order: 1
+                callback: root.change_btn_status
+                tooltip_text: "Mostrar todas as marcações"
 
-            Button:
+            TooltipButton:
                 text: "Lesionadas"
                 background_color: [1, 0, 0]
                 on_release: root.change_lesioned()
+                order: 2
+                callback: root.change_btn_status
+                tooltip_text: "Mostrar somente as lesionadas"
 
-            Button:
+            TooltipButton:
                 text: "Negativas"
                 background_color: [0, 0.298, 1]
                 on_release: root.change_negative()
+                order: 3
+                callback: root.change_btn_status
+                tooltip_text: "Mostrar somente as negativas"
 
         Label:
             id: img_result_text
@@ -65,6 +83,7 @@
                     size: self.size
                     pos: self.pos   # para pegar o objeto correto na imagem (sem isso a cor mudava no objeto errado)
             color: 0, 0, 0, 1
+            markup: True
 
 
 		AsyncImage:
@@ -72,10 +91,13 @@
             source: ''
             nocache: True
 
-        Button:
+        TooltipButton:
             text: "Processar nova imagem"
-            on_release: root.change_screen()
 			size_hint_y: 0.1
+            on_release: root.change_screen()
+            order: 4
+            callback: root.change_btn_status
+            tooltip_text: "Clique aqui para processar uma nova imagem"
 
 <WaitingPopUp>:
     title: "Aviso"
