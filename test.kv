@@ -102,7 +102,7 @@
 <WaitingPopUp>:
     title: "Aviso"
     size_hint_x: 0.6
-    size_hint_y: 0.2
+    size_hint_y: 0.22
 
     BoxLayout:
         orientation: "vertical"
@@ -111,5 +111,7 @@
             text: "Aguarde enquanto processamos sua imagem. \nEste popup fechará automaticamente ao finalizar o processamento."
             halign: "center"
 
-
-# usar dp para medida de padding e sp para medida de fonte
+        ProgressBar:
+            id: bar
+            max_value: 100
+            value: 0

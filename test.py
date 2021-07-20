@@ -5,6 +5,7 @@ from tkinter import *
 import pandas as pd
 from PIL import Image
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.properties import ListProperty
 from kivy.uix.popup import Popup
@@ -94,13 +95,19 @@ class HomeScreen(Screen):
         img_name = splits[len(splits) - 1]
         self.manager.ids.view_screen.ids.img_result_text.text = _get_result(img_name, self.ids.image.source)
         self.manager.ids.view_screen.ids.image2.source = BASE_PATH + "images/all.png"
+        Clock.unschedule(self._update_progress_bar)
         self.popup.dismiss()
+
+    def _update_progress_bar(self, event):
+        self.popup.ids.bar.value += 1
+        self.popup.ids.bar.value = self.popup.ids.bar.value % 100
 
     def submit_img(self):
         self.manager.current = 'view_screen'
         self.popup = WaitingPopUp()
         self.popup.open()
         detect_thread = DetectThread(self.ids.image.source, self._set_image)
+        Clock.schedule_interval(self._update_progress_bar, 0.09)
         detect_thread.start()
 
     def choose(self):
@@ -143,7 +150,7 @@ class ViewScreen(Screen):
         self.ids.image2.source = ""
         self.ids.img_result_text.text = ""
         _clean_environment()
-        self.manager.ids.home_screen.ids.image.source = "images/fundo.png"
+        self.manager.ids.home_screen.ids.image.source = BASE_PATH + "images/fundo.png"
         self.manager.ids.home_screen.ids.file_choose.text = "Carregar uma imagem"
         self.manager.ids.home_screen.ids.submit_button.disabled = True
 
